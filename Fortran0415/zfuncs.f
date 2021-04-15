@@ -991,3 +991,40 @@
       end
 !
 !----------------------------------------------------------------------
+      ! *** zzy@xjtu|111207
+      real*8 FUNCTION betaff(Rdon,Mdon,kdon)
+      implicit none
+      real*8 Rdon,Mdon
+      integer kdon
+      ! *
+      ! * to evaluate beta_w from the observations of wind velocities for
+      ! * different types of stars(from 4.1 of Belczynski et al 2008, apj,174,223-260)
+      ! *
+      if(kdon.eq.1.)then
+      if(Mdon.ge.120.)then
+            betaff=7.
+      elseif(Mdon.ge.1.4)then
+            betaff=0.021*(Mdon-1.4)+0.5
+      else
+            if(Mdon.le.1.4)then
+                  betaff=0.5
+            else
+                  betaff=0.8
+            endif
+      endif
+      elseif(kdon.ge.2..and.kdon.le.6..and.Rdon.ge.900.)then
+      betaff=0.125
+      elseif(kdon.ge.7..and.kdon.le.9.)then
+      if(Mdon.ge.120.)then
+            betaff=7.
+      elseif(Mdon.ge.10.)then
+            betaff=0.05182*(Mdon-10.)+1.3
+      else
+            betaff=1.3
+      endif
+      else
+            betaff=0.5
+      endif
+      return
+      end
+!----------------------------------------------------------------------

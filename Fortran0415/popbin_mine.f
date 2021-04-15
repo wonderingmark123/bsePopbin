@@ -9,6 +9,7 @@
       implicit none
 *
       INCLUDE 'const_bse.h'
+      ! include 'omp_lib.h'
 *
       integer i,j,k,jj,nm1,mass0INT,q2INT,seperationINT
       integer kw,kw2,kwx,kwx2,kstar(2)
@@ -38,12 +39,13 @@
       character(len=20) :: Ctemp
       CHARACTER*8 label(14)
       CHARACTER*4 Outname
+      INTEGER OMP_GET_THREAD_NUM
 ! haotian 2021/4/15
 ! Set FolderName to the name of filefolder that is used to store data
 ! then *.out files will be stored in FolderName\Outname\*.out
 ! make sure the filefolder exists before running this program
       CHARACTER(LEN=*),PARAMETER :: FolderName
-     &      ='D:\study\bsegit\bsePopbin\Data\'
+     &      ='D:\study\bsegit\bsePopbin\Data\0416\'
 !       real::nnn0(20)=(/0.2,0.6,2,6,20/),
 !       real::fff0(20)=(/50,55,60,65,70,75.0,
 !      &	80,85,90,95,99/)
@@ -99,7 +101,7 @@
       pts2 = 0.01
       pts3 = 0.02
       sigma = 265.0
-      beta = 3
+      beta = 2
       xi = 1.0 
       acc2 = 1.5
       epsnov = 0.001
@@ -138,21 +140,19 @@
        ALLnumMass=1000
        LxMax = 1d39
        eddfac = 10000.0
-       Outname='0415'
+       Outname='0416'
       !  *******************************************
 ! c      OPEN(10,file='binaries.in',status='unknown')
 ! c      READ(10,*)nm1
 ! *
 ! * Open the output files. set names for them
 ! *
-      OPEN(999,file = FolderName
-     &      //Outname//'\Test.log')
-      OPEN(11,file=FolderName//Outname//'\errstar.out'
+      OPEN(11,file=FolderName//'\errstar'//Outname//'.out'
      &,status='unknown')
-      OPEN(12,file=FolderName//Outname//'\all_Lx37erg_z0.01_wind_'
-     &      //'.out',status='unknown')
-      OPEN(13,file=FolderName//Outname//'\all_Lx37erg_z0.01_rb'
-     &      //'.out',status='unknown')
+      OPEN(12,file=FolderName//'\all_Lx37erg_z0.01_wind_'
+     &      //Outname//'.out',status='unknown')
+      OPEN(13,file=FolderName//'\all_Lx37erg_z0.01_rb_'
+     &      //Outname//'.out',status='unknown')
 !       OPEN(14,file='first_Lx37erg_z0.01_wind_'
 !      &      //Outname//'.out',status='unknown')
 !       OPEN(15,file='first_Lx37erg_z0.01_rb_'
@@ -160,14 +160,14 @@
 *     
             isht=0
       ! parallel running haotian 2021/4/15
-      use omp_lib
-      !call omp_set_nested(.true.)
-      write(*,*) "线程数为:",omp_get_num_procs()
-      !$OMP PARALLEL
-      !$OMP DO
+      ! use omp_lib
+      ! call omp_set_nested(.true.)
+      ! write(*,*) "线程数为:",omp_get_num_procs()
+      ! $OMP PARALLEL
+      ! $OMP DO
       ! do mass0INT = int(M1min),int(M1max),1
 
-      do mass0INT = 351,400
+      do mass0INT = 0,ALLnumMass
             
             
       do q2INT=0,92
@@ -373,11 +373,11 @@ c         READ(10,*)m1,m2,tb,ecc,z,tmax
                               ! 风吸积 未充满洛希搬
                               !  Mc^2 first
                               L_Eddington=2.6d38*mx2
-      m_transferrate=m_tr/(L_Eddington/1d7/0.1/(3.0d8)**2/Msun*yearsc)
+      m_transferrate=m_tr/(L_Eddington/1d7/0.3/(3.0d8)**2/Msun*yearsc)
                               if(m_transferrate.gt.1)then
                               Lx=L_Eddington*(1+log(m_transferrate))
                               else
-                              Lx=0.1*(3.0d8)**2*m_tr*Msun*10**7/yearsc
+                              Lx=0.3*(3.0d8)**2*m_tr*Msun*10**7/yearsc
                               endif
                               ! ********************************
                               ! TODO: using 0.1*Mc^2 to check
@@ -465,6 +465,8 @@ c         READ(10,*)m1,m2,tb,ecc,z,tmax
       enddo
       enddo
       enddo
+      ! $OMP END DO
+      ! $OMP END PARALLEL
 *
  111  FORMAT(f10.1,2i3,3f8.3,1p,e14.6)
  99   FORMAT(f10.4,2i3,10f10.4,5e12.4,f7.3,2f10.4)

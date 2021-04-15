@@ -203,6 +203,7 @@
       REAL bcm(50000,34),bpp(80,10)
       COMMON /BINARY/ bcm,bpp
       REAL*8 Ufun , nnn,fff,qnow,mkwgt,mkwlt,vinf,vorb
+      REAL*8 betaff,uflgrc
 *
 * Save the initial state.
 *
@@ -384,7 +385,7 @@
 
 ! TODO:  
 !  
-* sht changed 2020/3/22  NO  Bondi-Hoyle wind acceration
+* haotian changed 2020/3/22  NO  Bondi-Hoyle wind acceration
             if(neta.gt.tiny)then
                rlperi = rol(k)*(1.d0-ecc)
                dmr(k) = mlwind(kstar(k),lumin(k),rad(k),mass(k),
@@ -393,7 +394,9 @@
 * Calculate how much of wind mass loss from companion will be
 * accreted (Boffin & Jorissen, A&A 1988, 205, 155).
 *
-               vwind2 = 2.d0*beta*acc1*mass(k)/rad(k)
+               ! vwind2 = 2.d0*beta*acc1*mass(k)/rad(k)
+               vwind2 = 2.d0*betaff(rad(k),mass(k),kstar(k))
+     &                      *acc1*mass(k)/rad(k)
                omv2 = (1.d0 + vorb2/vwind2)**(3.d0/2.d0)
                dmt(3-k) = ivsqm*acc2*dmr(k)*((acc1*mass(3-k)/vwind2)**2)
      &                    /(2.d0*sep*sep*omv2)
@@ -427,12 +430,14 @@
       ! endif
          if(fff.gt.49.0.and.nnn.gt.1.0.and.nnn.lt.40.0)then
             ! print*,nnn
-            dmt(3-k) = Ufun(fff,nnn,beta,qnow)*dmr(k)/100
-
+            uflgrc = Ufun(fff,nnn,beta,qnow)/100
+         else
+            uflgrc = 0.0
          endif
-            
+         else
+            uflgrc = 0.0
          endif
-               dmt(3-k) = MIN(dmt(3-k),0.8d0*dmr(k))
+               dmt(3-k) = MIN(MAX(dmt(3-k),uflgrc*dmr(k)),0.8d0*dmr(k))
             else
                dmr(k) = 0.d0
                dmt(3-k) = 0.d0
@@ -906,7 +911,7 @@
          if(sgl.or.(rad(1).lt.rol(1).and.rad(2).lt.rol(2)).
      &      or.tphys.lt.tiny)then
             ip = ip + 1
-            ! sht  array 'bcm' above upper bound of 50000
+            ! haotian  array 'bcm' above upper bound of 50000
             ! shut it down when it is out of range
             if(ip.gt.50000)then
                bcm(2,1)=-1
@@ -1185,7 +1190,7 @@
 *
 * Identify special cases.
 *
-! ! sht changed 
+! ! haotian changed 
 ! Paper : ON THE FORMATION OF Be STARS THROUGH 
 ! BINARY INTERACTION by Shao & Li 
 ! The Astrophysical Journal, 796:37 (13pp), 2014 November 20
@@ -1590,7 +1595,7 @@
 * Limit according to the thermal timescale of the secondary.
 *
             dm2 = MIN(1.d0,10.d0*taum/tkh(j2))*dm1
-            ! sht half of mass are accreted
+            ! haotian half of mass are accreted
             ! if( kstar(j1) == 14.and. rad(j2)/rol(j2) > 1 )then
             !    dm2=0.5*dm1
             ! endif
