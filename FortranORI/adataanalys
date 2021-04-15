@@ -1,0 +1,135 @@
+*    1  Time,                                                   bse bcm array
+*    [2     stellar type,
+3        initial mass, 
+4    current mass,
+5      log10(L), 
+6       log10(r),
+7      log10(Teff),
+8        core mass,
+ core radius,
+  mass of any convective  envelope, 
+radius of the envelope, 
+epoch,
+ spin,
+  mass loss rate 太阳质量每年
+    ratio of radius to roche lobe radius , f
+*    [2     stellar type,
+3        initial mass, 
+4    current mass,
+5      log10(L), 
+6       log10(r),
+7      log10(Teff),
+8        core mass,
+ core radius,
+  mass of any convective envelope, 
+radius of the envelope, 
+epoch,
+in, sp
+  mass loss rate
+    ratio of radius to roche lobe radius (repeated for secondary)],
+*    period, year
+separation,
+ eccentricity.
+
+**********************************************************************************************
+
+输出变量（根据write可调 �?
+ 1 Time
+ 2 kw
+ 3 kw2
+ 4 current mass
+ 5  current mass2
+ 6 core mass 
+ 7 core mass 2
+ 8 logr
+ 9 logr2
+10  ratio of radius to roche lobe radius (repeated for secondary)],
+11  ratio of radius to roche lobe radius (repeated for secondary)],
+12 logL 与太阳光度比较（比�?�）
+13 logL
+14 spin
+15 spin
+16 mass loss rate
+17 mass loss rate
+18 separation
+下面已删�?
+19 eccentricity
+20 period day
+21 Teff
+22 Teff
+
+
+1W（瓦�?=1J（焦耳）/s(秒）=10^7ergs(尔格�?/s（秒�?
+
+sse
+
+*   1 Time, 2stellar3 type,3 initial 4mass,5 current6 mass,7 log10(L),8 log10(r),
+*    log10(Teff), core mass, epoch and spin.
+
+pra2  of  matlab program newly added line
+
+19  mass 
+20 mass2
+21 time for staying at the stage[inf , time before - time later , inf ]
+22 radiation 
+
+i1 15 超巨�?
+i2 29 中子�?
+
+
+
+
+
+
+
+ KW
+              0 - deeply or fully convective low mass MS star
+              1 - Main Sequence star
+              2 - Hertzsprung Gap
+              3 - First Giant Branch
+              4 - Core Helium Burning
+              5 - First Asymptotic Giant Branch
+              6 - Second Asymptotic Giant Branch
+              7 - Main Sequence Naked Helium star
+              8 - Hertzsprung Gap Naked Helium star
+              9 - Giant Branch Naked Helium star
+             10 - Helium White Dwarf
+             11 - Carbon/Oxygen White Dwarf
+             12 - Oxygen/Neon White Dwarf
+             13 - Neutron Star
+             14 - Black Hole
+             15 - Massless Supernova
+
+
+
+popbin.f 2020/5/28
+             
+m1
+,m2
+,Lx
+,ecc0,
+a
+tb0
+,mt1
+,mt2
+,kw
+,kw2
+,mx
+,mx2
+,eccx
+,tbx
+,f
+,nnn
+,uuu
+,m_tr
+
+
+evolv2.f
+
+* Set j1 to the donor - the primary
+* and j2 to the accretor - the secondary.
+
+plot_Lx_mesaNS
+mesa_lx= importdata('Lx_N.log' );
+% (massI)( obJ ( delt  (Lapp_total)   Lapp_overflow Lapp_wind)   beamingfactor time period_days star_1_mass
+% 1       2       3        4             5                 6       7            8   9           10
