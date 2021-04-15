@@ -38,6 +38,12 @@
       character(len=20) :: Ctemp
       CHARACTER*8 label(14)
       CHARACTER*4 Outname
+! haotian 2021/4/15
+! Set FolderName to the name of filefolder that is used to store data
+! then *.out files will be stored in FolderName\Outname\*.out
+! make sure the filefolder exists before running this program
+      CHARACTER(LEN=*),PARAMETER :: FolderName
+     &      ='D:\study\bsegit\bsePopbin\Data\'
 !       real::nnn0(20)=(/0.2,0.6,2,6,20/),
 !       real::fff0(20)=(/50,55,60,65,70,75.0,
 !      &	80,85,90,95,99/)
@@ -132,27 +138,33 @@
        ALLnumMass=1000
        LxMax = 1d39
        eddfac = 10000.0
-       
-       Outname='0403'
+       Outname='0415'
       !  *******************************************
-c      OPEN(10,file='binaries.in',status='unknown')
-c      READ(10,*)nm1
-*
-* Open the output files. set names for them
-*
-      OPEN(11,file='errstar.out',status='unknown')
-      OPEN(12,file='all_Lx37erg_z0.01_wind_'
-     &      //Outname//'.out',status='unknown')
-      OPEN(13,file='all_Lx37erg_z0.01_rb_'
-     &      //Outname//'.out',status='unknown')
+! c      OPEN(10,file='binaries.in',status='unknown')
+! c      READ(10,*)nm1
+! *
+! * Open the output files. set names for them
+! *
+      OPEN(999,file = FolderName
+     &      //Outname//'\Test.log')
+      OPEN(11,file=FolderName//Outname//'\errstar.out'
+     &,status='unknown')
+      OPEN(12,file=FolderName//Outname//'\all_Lx37erg_z0.01_wind_'
+     &      //'.out',status='unknown')
+      OPEN(13,file=FolderName//Outname//'\all_Lx37erg_z0.01_rb'
+     &      //'.out',status='unknown')
 !       OPEN(14,file='first_Lx37erg_z0.01_wind_'
 !      &      //Outname//'.out',status='unknown')
 !       OPEN(15,file='first_Lx37erg_z0.01_rb_'
 !      &     //Outname//'.out',status='unknown')
 *     
             isht=0
-            
-      
+      ! parallel running haotian 2021/4/15
+      use omp_lib
+      !call omp_set_nested(.true.)
+      write(*,*) "线程数为:",omp_get_num_procs()
+      !$OMP PARALLEL
+      !$OMP DO
       ! do mass0INT = int(M1min),int(M1max),1
 
       do mass0INT = 351,400
