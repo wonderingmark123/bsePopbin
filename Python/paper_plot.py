@@ -12,9 +12,6 @@ def PlotAll(all_rb_1,all_wind_1,
     # 字体预设1
     font1 = {'family':'Times New Roman','weight':'normal','size':16,}
     if np.size(all_rb_1) == 0:
-
-        
-
         ###########读取数据############
         mat = h5py.File(os.path.join(FileFolder,'1117_paper.mat'))
         # mat文件里可能有多个cell，各对应着一个dataset
@@ -52,8 +49,6 @@ def PlotAll(all_rb_1,all_wind_1,
     all_wind_1 = all_wind_1[all_wind_1[:,10]>0,:];
 
     allinall=np.vstack((all_rb_1, all_wind_1))
-
-    allinall = allinall[allinall[:,10]>0,:];
     ##### Luminosity function
 
     ge=50
@@ -64,52 +59,48 @@ def PlotAll(all_rb_1,all_wind_1,
 
     ## different maximum evolution time for binaries
 
-    tspan = [5,10,15,20,50,100,200];
+    # tspan = [5,10,15,20,50,100,200];
 
-    N_time=np.zeros((len(tspan),50))
-    for i in range(len(tspan)):
-        tmax = tspan[i];
-        [N_NSwind, N_NSrb] = plot_Lx_mesaNS(beaming,tmax,fileFolder=FileFolder)
+    # N_time=np.zeros((len(tspan),50))
+    # for i in range(len(tspan)):
+    #     tmax = tspan[i];
+    #     [N_NSwind, N_NSrb] = plot_Lx_mesaNS(beaming,tmax,fileFolder=FileFolder)
 
         
-        temparray=all_rb_1[(all_rb_1[:,6]<=tmax) + (all_rb_1[:,9]==14),:].copy()
-        N_BHrb = plot_Lx_NNsum_gedian(temparray,beaming)[0]
+    #     temparray=all_rb_1[(all_rb_1[:,6]<=tmax) & (all_rb_1[:,9]==14),:].copy()
+    #     N_BHrb = plot_Lx_NNsum_gedian(temparray,beaming)[0]
 
 
-        temparray=all_wind_1[(all_wind_1[:,6]<=tmax) + (all_wind_1[:,9]==14),:].copy()
-        N_BHwind    = plot_Lx_NNsum_gedian(temparray,0)[0]
+    #     temparray=all_wind_1[(all_wind_1[:,6]<=tmax) & (all_wind_1[:,9]==14),:].copy()
+    #     N_BHwind    = plot_Lx_NNsum_gedian(temparray,0)[0]
 
-        N_time[i]=N_BHrb + N_BHwind + N_NSrb + N_NSwind
+    #     N_time[i]=N_BHrb + N_BHwind + N_NSrb + N_NSwind
 
-    plt.figure()
-    (obssort,num)=OBSplot(1)
-    plt.scatter(obssort,num,marker='s',color=(0.6350,0.0780,0.1840),label='Obsevation')
-    plt.plot(Lx_x, np.log10(N_time[2]),linestyle='-',color=(0.3010,0.7450,0.9330),label='15Myr')
-    plt.plot(Lx_x, np.log10(N_time[3]),linestyle='-.',color=(0.4660,0.6740,0.1880),label='20Myr')
-    plt.plot(Lx_x, np.log10(N_time[4]),linestyle=':',color=(0.3010,0.250,0.9),label='50Myr')
-    plt.plot(Lx_x, np.log10(N_time[5]),linestyle='--',color=(0.9,0.2,0.6),label='100Myr')
-    plt.plot(Lx_x, np.log10(N_time[6]),linestyle='-',color=(0,0.4470,0.7410),label='200Myr')
-    plt.xlabel('log10(Luminosity) / log10(erg/s)',font1)
-    plt.ylabel('log10(Number of ULX)',font1)
-    plt.legend(prop=font1)
-    plt.yscale('linear')
-    plt.xlim((39,40.5))
-    plt.ylim((0.5,2))
+    # plt.figure()
+    # (obssort,num)=OBSplot(1)
+    # plt.scatter(obssort,num,marker='s',color=(0.6350,0.0780,0.1840),label='Obsevation')
+    # plt.plot(Lx_x, np.log10(N_time[2]),linestyle='-',color=(0.3010,0.7450,0.9330),label='15Myr')
+    # plt.plot(Lx_x, np.log10(N_time[3]),linestyle='-.',color=(0.4660,0.6740,0.1880),label='20Myr')
+    # plt.plot(Lx_x, np.log10(N_time[4]),linestyle=':',color=(0.3010,0.250,0.9),label='50Myr')
+    # plt.plot(Lx_x, np.log10(N_time[5]),linestyle='--',color=(0.9,0.2,0.6),label='100Myr')
+    # plt.plot(Lx_x, np.log10(N_time[6]),linestyle='-',color=(0,0.4470,0.7410),label='200Myr')
+    # plt.xlabel('log10(Luminosity) / log10(erg/s)',font1)
+    # plt.ylabel('log10(Number of ULX)',font1)
+    # plt.legend(prop=font1)
+    # plt.yscale('linear')
+    # plt.xlim((39,40.5))
+    # plt.ylim((0.5,2))
 
     #plt.show() #记得注释掉！！！！
     ##
 
     [N_NSwind,N_NSrb] = plot_Lx_mesaNS(beaming,fileFolder=FileFolder);
 
-    temparray=all_rb_1[all_rb_1[i,9]==14,:].copy()
+    temparray=all_rb_1[all_rb_1[:,9]==14,:].copy()
     N_BHrb      = plot_Lx_NNsum_gedian(temparray,beaming)[0]
 
-    selectnum=[]
-    for i in range (len(all_wind_1)):
-        if all_wind_1[i,9]==14:
-            selectnum.append(i)
-    temparray=all_wind_1[selectnum,:]   
-    del(selectnum); del(i);
+    
+    temparray=all_wind_1[all_wind_1[:,9]==14,:].copy()
     N_BHwind    = plot_Lx_NNsum_gedian(temparray,0)[0]
 
     N_all       = N_BHrb + N_BHwind + N_NSrb + N_NSwind
@@ -138,21 +129,13 @@ def PlotAll(all_rb_1,all_wind_1,
     (obssort,num)=OBSplot(1);
     plt.scatter(obssort,num,marker='s',color=(0.6350,0.0780,0.1840),label='Obsevation')
 
-    selectnum=[]
-    for i in range (len(allinall)):
-        if allinall[i,9]==14 and allinall[i,8]<=6:
-            selectnum.append(i)
-    temparray=allinall[selectnum,:]   
-    del(selectnum); del(i);
+    
+    temparray=allinall[(allinall[:,9]==14) & (allinall[:,8]<=6),:].copy()
     _,Lx_x_plot,log10_NNsum_plt=plot_Lx_NNsum_gedian(temparray,beaming)
     plt.plot(Lx_x_plot,log10_NNsum_plt,linestyle='--',color=(0.9010,0.550,0.2),label='BH-H')
 
-    selectnum=[]
-    for i in range (len(allinall)):
-        if allinall[i,9]==14 and allinall[i,8]<=9 and allinall[i,8]>=7:
-            selectnum.append(i)
-    temparray=allinall[selectnum,:]   
-    del(selectnum); del(i);
+    
+    temparray=allinall[(allinall[:,9]==14) & (allinall[:,8]<=9) & (allinall[:,8]>=7),:].copy()
     _,Lx_x_plot,log10_NNsum_plt=plot_Lx_NNsum_gedian(temparray,beaming)
     plt.plot(Lx_x_plot,log10_NNsum_plt,linestyle=':',color=(0.9010,0.550,0.2),label='BH-He')
 
@@ -176,20 +159,20 @@ def PlotAll(all_rb_1,all_wind_1,
     #SETplot(' M2-Porb-total')
 
 
-    temparray=all_rb_1[all_rb_1[i,9]==14,:].copy()
+    temparray=all_rb_1[all_rb_1[:,9]==14,:].copy()
     plot_mass_tb_gedian_paper(temparray,xge,yge,' M2-Porb-BH-RLOF');
     #SETplot(' M2-Porb-BH-RLOF')
 
 
-    temparray=all_wind_1[all_wind_1[i,9]==14,:].copy()
+    temparray=all_wind_1[all_wind_1[:,9]==14,:].copy()
     plot_mass_tb_gedian_paper(temparray,xge,yge,' M2-Porb-BH-wind')
     #SETplot(' M2-Porb-BH-wind')
 
-    temparray=all_rb_1[all_rb_1[i,9]==13,:].copy() 
+    temparray=all_rb_1[all_rb_1[:,9]==13,:].copy() 
     plot_mass_tb_gedian_paper(temparray,xge,yge,' M2-Porb-NS-RLOF')
     #SETplot(' M2-Porb-NS-RLOF')
 
-    temparray=all_wind_1[all_wind_1[i,9]==13,:].copy() 
+    temparray=all_wind_1[all_wind_1[:,9]==13,:].copy() 
     plot_mass_tb_gedian_paper(temparray,xge,yge,' M2-Porb-NS-wind')
     #SETplot(' M2-Porb-NS-wind')
     #plt.show()
@@ -200,28 +183,23 @@ def PlotAll(all_rb_1,all_wind_1,
     #SETplot(' Lx-Porb-total')
 
 
-    temparray=all_rb_1[all_rb_1[i,9]==14,:].copy() 
+    temparray=all_rb_1[all_rb_1[:,9]==14,:].copy() 
     plot_lx_tb_gedian_paper(temparray,xge,yge,' Lx-Porb-BH-RLOF')
     #SETplot(' Lx-Porb-BH-RLOF')
 
     
-    temparray=all_wind_1[all_wind_1[i,9]==14,:].copy()  
+    temparray=all_wind_1[all_wind_1[:,9]==14,:].copy()  
 
     plot_lx_tb_gedian_paper(temparray,xge,yge,' Lx-Porb-BH-wind')
     #SETplot(' Lx-Porb-BH-wind')
 
 
-    temparray=all_rb_1[all_rb_1[i,9]==13,:].copy() 
+    temparray=all_rb_1[all_rb_1[:,9]==13,:].copy() 
 
     plot_lx_tb_gedian_paper(temparray,xge,yge,' Lx-Porb-NS-RLOF')
     #SETplot(' Lx-Porb-NS-RLOF')
 
-    selectnum=[]
-    for i in range (len(all_wind_1)):
-        if all_wind_1[i,9]==13:
-            selectnum.append(i)
-    temparray=all_wind_1[selectnum,:].copy() 
-    del(selectnum); del(i);
+    temparray=all_wind_1[all_wind_1[:,9]==13,:].copy()
     plot_lx_tb_gedian_paper(temparray,xge,100,' Lx-Porb-NS-wind')
     #SETplot(' Lx-Porb-NS-wind')
 

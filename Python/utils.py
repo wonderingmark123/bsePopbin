@@ -84,7 +84,7 @@ def ImportOriData(
         np.save(os.path.join(DataFolder,OutName,'WinddataSelected'),Windseleted)
     return RLselected[:,0:22],Windseleted
 def DELallrbwind(all_rb, all_wind,
-    minLx=1e39, 
+    minLx=39, 
     CHAbeamingFlag=False ,
     eddfac=1e4,
     DELtmax = 200):
@@ -449,7 +449,7 @@ def plot_Lx_NNsum_gedian(data,beaming,
 
     return (NNsum,Lx_x,np.log10(NNsum))
 
-def plot_lx_tb_gedian_paper(data_ori, Lxge, orbge, my_title, Limit_cri=100):
+def plot_lx_tb_gedian_paper(data_ori, Lxge, orbge, my_title, Limit_cri=1000):
     beaming=1;
     # 0 无修正：数目不做调整
     # 1 直接乘以b：数目乘以b=观测的数目
@@ -492,7 +492,7 @@ def plot_lx_tb_gedian_paper(data_ori, Lxge, orbge, my_title, Limit_cri=100):
     plt.title(my_title)
 
     return NN
-def plot_mass_tb_gedian_paper(data_ori, massge, orbge, my_title, Limit_cri=100):
+def plot_mass_tb_gedian_paper(data_ori, massge, orbge, my_title, Limit_cri=1000):
     ml=11;
 
     beaming=1;

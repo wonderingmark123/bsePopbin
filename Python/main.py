@@ -9,10 +9,11 @@ def main0415():
     NumParallel     = 8,
     DataFolder      = '..\Data',
     OutName         = '0415',
-    SaveNPY         = True,
+    SaveNPY         = False,
     LoadNPY         = True)
     PlotAll(all_rb_1,all_wind_1,
     FileFolder = 'D:/study/bsegit/bsePopbin/Data/PaperPlotData')
+    
     return
 
 def main1117():
