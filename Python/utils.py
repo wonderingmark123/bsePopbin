@@ -78,6 +78,10 @@ def ImportOriData(
                 ''.join([ 'all_Lx37erg_z0.01_rb_',OutName,'.out']))
         FilenameWind = os.path.join(DataFolder,OutName,
             ''.join([ 'all_Lx37erg_z0.01_wind_',OutName,'.out']))
+        RLoriPart = np.loadtxt(FileNameRL)
+        WindoriPart = np.loadtxt(FilenameWind)
+        if np.size(RLori) == 0:
+            RLori,Windori = RLoriPart,WindoriPart
     RLselected,Windseleted = DELallrbwind(RLori,Windori)
     if SaveNPY:
         np.save(os.path.join(DataFolder,OutName,'RBdataSelected'),RLselected)
@@ -87,7 +91,8 @@ def DELallrbwind(all_rb, all_wind,
     minLx=39, 
     CHAbeamingFlag=False ,
     eddfac=1e4,
-    DELtmax = 200):
+    DELtmax = 200,
+    MaxDuration = 1):
 
     # %% 1000Myr delete data whose max time is larger than DELtmax
 
@@ -106,7 +111,7 @@ def DELallrbwind(all_rb, all_wind,
     all_rb_1 =all_rb[all_rb[:, 7] <= DELtmax, :].copy()
     # %% change beaming factor
     if (CHAbeamingFlag):
-        raise os.error('This part is not finished yet')
+        raise os.error('This part is not finished yet！')
         all_rb_1[:, 3] = all_rb_1[:, 3] * all_rb_1[:, 17]
         all_rb_1[:, 17] = getBeaming(2, all_rb_1[:, 16])
         all_rb_1[:, 3] = all_rb_1[:, 3] / all_rb_1[:, 17]
@@ -134,6 +139,9 @@ def DELallrbwind(all_rb, all_wind,
     # %% \delta T <0
     all_rb_1 = all_rb_1[all_rb_1[:, 19] > 0,:].copy()
     all_wind_1 = all_wind_1[all_wind_1[:, 19] > 0, :].copy()
+    # delete \delta T > MaxDuration
+    all_wind_1 = all_wind_1[all_wind_1[:, 19] <= MaxDuration, :].copy()
+    all_rb_1 =all_rb_1[all_rb_1[:, 19] <= MaxDuration, :].copy()
     # %% Lx is lower than Lxmin
     all_rb_1 = all_rb_1[all_rb_1[:, 2] >= 10**minLx,:].copy()
     all_wind_1 = all_wind_1[all_wind_1[:, 2] >= 10**minLx, :].copy()
@@ -501,7 +509,7 @@ def plot_mass_tb_gedian_paper(data_ori, massge, orbge, my_title, Limit_cri=1000)
     # 2 方法二：像我昨天下午发的修正，乘以(8*b).^0.5/pi
     # 3 方法三，调整了一些估计项acos(1-b)*2/pi
     data = data_ori.copy()
-    data[:,ml-1]=np.log10(data[:,ml-1]);
+    # data[:,ml-1]=np.log10(data[:,ml-1]);
     massline=np.linspace(min(data[:,ml-1])-np.spacing(1.0)*100,max(data[:,ml-1]),massge)
     orbline=np.linspace(min(np.log10(data[:,13]))-np.spacing(1.0)*100,max(np.log10(data[:,13])),orbge)
     NN=np.zeros((len(massline),len(orbline)))
@@ -512,7 +520,7 @@ def plot_mass_tb_gedian_paper(data_ori, massge, orbge, my_title, Limit_cri=1000)
         if (data[i,14]>100):
             xishu=Beamingfactor(beaming,data[i,16])
             rate=massFunction(data[i,0])*xishu
-            NN[int(masswei)-1,int(orbwei)-1]=NN[int(masswei)-1,int(orbwei)-1]+data[i,19]*rate
+            NN[int(masswei)-1,int(orbwei)-1] = NN[int(masswei)-1,int(orbwei)-1]+data[i,19]*rate
         else:
             NN[int(masswei)-1,int(orbwei)-1]=NN[int(masswei)-1,int(orbwei)-1]+data[i,19]*massFunction(data[i,0])
     

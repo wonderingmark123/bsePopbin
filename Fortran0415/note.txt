@@ -188,3 +188,14 @@ beta = 3
 0403
 add qc change in evolv2.f line 1189
 rm ! Lx=0.1*(3.0d8)**2*m_tr*Msun*10**7/yearsc
+
+0415
+beta = 2
+evolv2.f maximum of wind effeciency 
+evolv2.f changed beta in vwind2 to betaff in zfuncs.f
+
+0416
+beta = 2
+wind eta = 0.3 
+Lx = eta * m_tr *c **2
+

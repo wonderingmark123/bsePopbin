@@ -1,8 +1,9 @@
 CMPLR = gfortran
 # FFLAGS = -O3 -g -fbacktrace -fcheck=all -ffpe-trap=zero,overflow -finit-real=nan
 
-FFLAGS = -O3 -g -fbacktrace -fcheck=all -finit-real=nan -fopenmp
-#  the setting above is explained bt following website. sht
+FFLAGS = -O3 -g -fbacktrace -fcheck=all -finit-real=nan 
+# haotian  
+#  the setting above is explained bt following website. 
 # https://gcc.gnu.org/onlinedocs/gfortran/Debugging-Options.html
 # remove the -ffpe-trap=zero,overflow  to avoid stopping progress.
 LFLAGS = const_bse.h zdata.h
