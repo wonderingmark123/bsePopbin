@@ -74,9 +74,9 @@ def ImportOriData(
                 Windori = np.vstack((Windori,WindoriPart)).copy()
         
     else:
-        FileNameRL = os.path.join(DataFolder,OutName,
+        FileNameRL = os.path.join(DataFolder,
                 ''.join([ 'all_Lx37erg_z0.01_rb_',OutName,'.out']))
-        FilenameWind = os.path.join(DataFolder,OutName,
+        FilenameWind = os.path.join(DataFolder,
             ''.join([ 'all_Lx37erg_z0.01_wind_',OutName,'.out']))
         RLoriPart = np.loadtxt(FileNameRL)
         WindoriPart = np.loadtxt(FilenameWind)
