@@ -1,0 +1,9 @@
+
+*.exe
+*.out
+*.o
+*.npy
+*.log
+*.mat
+*.pyc
+*.json

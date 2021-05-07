@@ -46,21 +46,26 @@
 In this document, I will introduce every function in [utils.py](./utils.py)
 
 ## GetSFR
-Caculate the Binary Star forming rate of this program
+Calculate the Binary Star forming rate of this program
 ### Parameters
 
 SFR: float, original star forming rate obtained by obsercation.
+
 MminMINE: float or double, minimum higher initial mass.
+
 alpha: float or double, the exponent of mass function, which is different according to different version of mass function.
+
 qav: float, average mass ratio (q) of popbin program (default: 0.535)
+
 binary: int, Whether your SFR is for binary or all stars. ONLY 0 or 1!
+
 MminSFR: float, the minimum mass taken into account while caculating SFR.
 
 ### Returns
 
 Sb: float, Binary Star forming rate of this program
 ## massFunction
-Caculate the birth rate of particular binary system.
+Calculate the birth rate of particular binary system.
         
 ### Parameters
 ### Local
@@ -69,11 +74,17 @@ mass: Double or float, the **higher** initial mass of binaries system.
 ### Global
 
 AllmassNUM: int, total mass number of Popbin.
-M1MAX: float or double, maximum higher initial mass 
-M1MIN: float or double, minimum higher initial mass 
+
+M1MAX: float or double, maximum higher initial mass  
+
+M1MIN: float or double, minimum higher initial mass  
+
 SFR: float or double, binary star forming rate 
-qNUM: int, total q (mass ratio) number of Popbin.
+
+qNUM: int, total q (mass ratio) number of Popbin.  
+
 aNUM: int, total a (seperation) number of Popbin.
+
 alpha: float or double, the exponent of mass function, which is different according to different version of mass function.
 
 ### Returns
@@ -90,14 +101,19 @@ Please make sure your data files saved in ``{DataFolder}/{OutName}/all_Lx37erg_z
 
 ### Parameters
 NumParallel : int, the same as the setting in popbin program, (default: 1)
+
 DataFolder : string, the data saving folder of original output of popbin program.
+
 OutName : string, the same as the setting in popbin program, which is the version of popbin program.
+
 SaveNPY : bool, whether this program save the all_rb and all_wind array in NPY form in the same file folder. 
+
 LoadNPY : bool, whether this program load the all_rb and all_wind array in NPY form in the same file folder. Please set it to ``False`` in the first time. NPY form can speed up the loading progress significantly.
 
 ### Returns
 
 RLselected: 2-D array, the meaning of each column are as folowing. The output array have been selected by ``DELallrbwind`` function.
+
 Windseleted: 2-D array, the meaning of each column are as folowing. The output array have been selected by ``DELallrbwind`` function.
 
 |Column| 0  |   1   |    2    |   3  |     4    |   5 |      6    |   7   |    8   |    9     |
@@ -131,25 +147,28 @@ all_rb_1,all_wind_1 = ImportOriData(
 
 ## DELallrbwind
 
-Caculate the Binary Star forming rate of this program
+Calculate the Binary Star forming rate of this program
 ### Parameters
 
 all_rb: 2-D array, original data of Roche-lobe binaries obtained from Fortran0415 ``popbin_mine.f`` program.
+
 all_wind: 2-D array, original data of Wind Roche-lobe binaries obtained from Fortran0415 ``popbin_mine.f`` program.
+
 minLx: float or double, minimum luminosity of selection. (default: 39)
-CHAbeamingFlag=False ,
-eddfac=1e4,
-DELtmax = 200,
-MaxDuration = 1
+
 CHAbeamingFlag: bool, Whether changing beaming mode. ABANDONED! (default: False)
+
 eddfac: double, Maximum edding factor of selection (default: 1e4)
+
 DELtmax: float, Maximum evolution time of selection (default: 200 for Ring Galaxies)
+
 MaxDuration: float, Maximum stage duration of selection. In other words, the duration between two row of original bcm array in bse may be longer than several million year which is unrealiable for rapid mass transfer. (default: 1)
 
 
 ### Returns
 
 RLselected: 2-D array, Selected array
+
 Windseleted: 2-D array, Selected array
 
 ### Criterion
@@ -171,6 +190,7 @@ Different mode for beaming. The larger b is, the realistic the result is (maybe)
 ### Parameters
 
 b: float, beaming factor.
+
 beaming: int, mode for caculation of beaming factor. The larger b is, the realistic the result is (maybe).(Defaut: 1)
 - 0 无修正：数目不做调整
 - 1 直接乘以b：数目乘以b=观测的数目
@@ -182,9 +202,9 @@ beaming: int, mode for caculation of beaming factor. The larger b is, the realis
 Beaming factor
 ## OBSplot
 Plot the observation result of Wolter 2018 in seven Ring Galaxies.
-[2.6,2.5,2.3,20,8.0,4.1,4]
+
 |num|Ring Galaxies|SFR|
-|  :----:  | :----:  |
+|  :----:  | :----:  |:----:  |
 |1|AM0644x3	|2.6|
 |2|Arp148x1	|2.5|
 |3|Arp143	|2.3|
@@ -196,12 +216,15 @@ Plot the observation result of Wolter 2018 in seven Ring Galaxies.
 ### Parameters
 
 logFlag: {bool,0,1}, whether return a log10(num) result or not. 
+
 obs: (local) 1-d array, the original observation data.
 
 ### Returns
 
 This function return a turple
+
 obssort: array, the luminosity of each ULXs in seven Ring Galaxies in order.
+
 num: 1-D array, the number of ULXs more luminous than each luminosity of obssort.
 ```python
 num = np.linspace(len(obssort),1,len(obssort))
@@ -212,15 +235,21 @@ Different mode for beaming. The larger b is, the realistic the result is (maybe)
 ### Parameters
 
 beaming: float, beaming factor.
+
 tmax: float, maximum evolution time for bianries.
+
 Number_XLFpoint: int, the length of the array while ploting XLF.
-minLx: float, minimum luminosity of XLF
-maxLx: float, maximum luminosity of XLF
+
+minLx: float, minimum luminosity of XLF.
+
+maxLx: float, maximum luminosity of XLF.
+
 fileFolder: path, the saving path of mesa data 
 
 ### Returns
 
 NNsumwind: array, the number of predicted ULXs via Roche-Lobe overflow by mesa program which is more luminous than particular luminosity.
+
 NNsumrb: array, the number of predicted ULXs via Wind Roche-Lobe overflow by mesa program which is more luminous than particular luminosity.
 
 ### Warning
@@ -236,25 +265,36 @@ Generate data for ploting the X-ray Luminosity function(XLF).
 
 data: 2-D array, in the same form with all_rb_1 or all_wind_1, and could be part of them.
 beaming: float, beaming factor.
+
 Number_XLFpoint: int, the length of the array while ploting XLF.
-minLx: float, minimum luminosity of XLF
-maxLx: float, maximum luminosity of XLF
+
+minLx: float, minimum luminosity of XLF.
+
+maxLx: float, maximum luminosity of XLF.
 
 ### Returns
 (NNsum,Lx_x,np.log10(NNsum))
 NNsum: 1-D array, the number of predicted ULXs which is more luminous than particular luminosity (Lx_x) obtained from the input data.
+
 Lx_x: 1-D array, particular luminosity (Lx_x) 
-> Lx_x=np.linspace(minLx,maxLx,Number_XLFpoint)
+```python
+Lx_x = np.linspace(minLx,maxLx,Number_XLFpoint)
+```
 ## plot_lx_tb_gedian_paper
 Generate data for ploting the distribution of luminosity-orbit plane.
 
 ### Parameters
 
 data_ori: 2-D array, in the same form with all_rb_1 or all_wind_1, and could be part of them.
+
 beaming: float, beaming factor.
+
 Number_Lx: int, the length of the array related to luminosity.
+
 Number_orb: int, the length of the array related to orbit.
-my_title: string, title of this figure
+
+my_title: string, title of this figure.
+
 Limit_cri: number, the minimum distribution for showing in the plot. For example, if Limit_cri=1000 and the maximum distribution is 1. then the plot will not display distribution less than 1/1000.
 
 ### Returns
@@ -266,9 +306,13 @@ Generate data for ploting the distribution of mass-orbit plane.
 
 data_ori: 2-D array, in the same form with all_rb_1 or all_wind_1, and could be part of them.
 beaming: float, beaming factor.
+
 Number_mass: int, the length of the array related to mass.
+
 Number_orb: int, the length of the array related to orbit.
-my_title: string, title of this figure
+
+my_title: string, title of this figure.
+
 Limit_cri: number, the minimum distribution for showing in the plot. For example, if Limit_cri=1000 and the maximum distribution is 1. then the plot will not display distribution less than 1/1000.
 
 ### Returns
